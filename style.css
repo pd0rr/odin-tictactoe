@@ -1,0 +1,16 @@
+.board-container {
+    display: grid;
+    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+    width: 200px;
+    height: 200px;
+    gap: 2px;
+
+    background-color: black;
+}
+
+.cell {
+    background-color: white;
+    font-size: 50px;
+    font-family: sans-serif;
+    text-align: center;
+}
