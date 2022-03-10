@@ -1,7 +1,7 @@
 "use strict";
 
 const Gameboard = {
-    board: new Array(9),
+    board: ["","","","","","","","",""],
 
     render: function () {
         const container = document.querySelector(".board-container");
@@ -34,10 +34,4 @@ const Game = {
     }
 }
 
-
-Gameboard.board = [ "O", "X", " ",
-                    " ", "O", "X",
-                    " ", "O", "X"];
-
-Player("X").playMove(2);
 Gameboard.render();
