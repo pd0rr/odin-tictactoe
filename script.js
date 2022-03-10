@@ -24,6 +24,17 @@ function Player(symbol) {
     return { symbol, playMove };
 }
 
+const Game = {
+    players: [Player("X"), Player("O")],
+    toPlay: 0,
+    handleClick: function (index) {
+        this.players[this.toPlay].playMove(index);
+        this.toPlay = (this.toPlay + 1) % this.players.length;
+        Gameboard.render();
+    }
+}
+
+
 Gameboard.board = [ "O", "X", " ",
                     " ", "O", "X",
                     " ", "O", "X"];
