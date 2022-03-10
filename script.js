@@ -27,10 +27,14 @@ function Player(symbol) {
 const Game = {
     players: [Player("X"), Player("O")],
     toPlay: 0,
-    handleClick: function (index) {
+    handleClick: function(cell, index) {
+        // if cell is already marked, ignore the click.
+        if (cell.innerText != "") return false;
+
         this.players[this.toPlay].playMove(index);
         this.toPlay = (this.toPlay + 1) % this.players.length;
         Gameboard.render();
+        return true;
     }
 }
 
