@@ -1,6 +1,6 @@
 "use strict";
 
-const Game = {
+const Gameboard = {
     board: new Array(9),
 
     render: function () {
@@ -10,19 +10,23 @@ const Game = {
             cells.item(i).innerText = this.board[i];
         }
     },
+
+    mark: function(player, index) {
+        this.board[index] = player.symbol;
+    }
 };
 
-function Player (symbol) {
-    const proto = {
-        playMove() {
-            
-        }
-    }
-    return {symbol}
+// Player factory
+function Player(symbol) {
+    const playMove = function (index) {
+        Gameboard.mark(this, index);
+    };
+    return { symbol, playMove };
 }
 
-Game.board = ["O", "X", " ",
-              " ", "O", "X",
-              " ", "O", "X"];
+Gameboard.board = [ "O", "X", " ",
+                    " ", "O", "X",
+                    " ", "O", "X"];
 
-Game.render();
+Player("X").playMove(2);
+Gameboard.render();
