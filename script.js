@@ -21,11 +21,11 @@ const Gameboard = {
 };
 
 // Player factory
-function Player(symbol) {
+function Player(name, symbol) {
     const playMove = function (index) {
         Gameboard.mark(this, index);
     };
-    return { symbol, playMove };
+    return {name, symbol, playMove};
 }
 
 const Game = {
