@@ -122,4 +122,16 @@ const Game = {
     }
 }
 
+//CPU factory
+function CPU(game, order, symbol) {
+    const obj = Player("CPU", symbol);
+
+    // for now, choose a random move.
+    obj.chooseMove = function() {
+        return Math.floor(Math.random() * 9);
+    }
+
+    return obj;
+}
+
 Gameboard.render();
