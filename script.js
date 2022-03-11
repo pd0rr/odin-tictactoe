@@ -13,6 +13,10 @@ const Gameboard = {
 
     mark: function(player, index) {
         this.board[index] = player.symbol;
+    },
+
+    clear: function() {
+        this.board = ["","","","","","","","",""];
     }
 };
 
@@ -35,6 +39,14 @@ const Game = {
 
         this.players[this.toPlay].playMove(index);
         this.toPlay = (this.toPlay + 1) % this.players.length;
+        
+        // If game over, reset board.
+        const s = this.score();
+        if (s != 0) {
+            this.gameboard.clear();
+            this.toPlay = 0;
+        }
+        
         Gameboard.render();
         return true;
     },
