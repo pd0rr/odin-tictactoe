@@ -30,7 +30,7 @@ function Player(name, symbol) {
 
 const Game = {
     gameboard: Gameboard,
-    players: [Player("X"), Player("O")],
+    players: [Player('Player1', "X"), Player('Player2', "O")],
     toPlay: 0,
 
     handleClick: function(cell, index) {
