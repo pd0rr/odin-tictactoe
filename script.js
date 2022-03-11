@@ -36,14 +36,16 @@ const Game = {
 
     newGame: function() {
         // get data from form
-        const playerXname = document.querySelector("#playerX");
-        const playerOname = document.querySelector("#playerO");
+        const playerXname = document.querySelector("#playerX").value;
+        const playerOname = document.querySelector("#playerO").value;
 
         // create players
         this.players = [Player(playerXname, "X"), Player(playerOname, "O")];
 
         // clear board
         this.gameboard.clear();
+
+        this.toPlay = 0;
 
         // switch game state
         this.state = "game";
@@ -60,18 +62,31 @@ const Game = {
 
         this.players[this.toPlay].playMove(index);
         this.toPlay = (this.toPlay + 1) % this.players.length;
-        
+
         // score game.
         const s = this.score();
 
         // Handle game over.
         if (s != 0) {
             this.state = "menu";
-            this.toPlay = 0;
+            this.declareWinner(s);
         }
         
         this.gameboard.render();
         return true;
+    },
+
+    declareWinner: function(score) {
+        const span = document.querySelector("#winner");
+
+        switch (score) {
+            case 1: span.innerText = "Tie!"; 
+            break;
+            case "X": span.innerText = `${this.players[0].name} won!`;
+            break;
+            case "O": span.innerText = `${this.players[1].name} won!`;
+            break;
+        }
     },
 
     // return winning player's mark. Return 1 for a tie, 0 for an unfinished game.
