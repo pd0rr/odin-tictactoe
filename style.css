@@ -22,3 +22,9 @@
     gap: 10px;
     padding-top: 20px;
 }
+
+.new-game-form label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+}
