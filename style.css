@@ -14,3 +14,11 @@
     font-family: sans-serif;
     text-align: center;
 }
+
+.new-game-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 10px;
+    padding-top: 20px;
+}
