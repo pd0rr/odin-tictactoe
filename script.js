@@ -77,16 +77,20 @@ const Game = {
     },
 
     declareWinner: function(score) {
-        const span = document.querySelector("#winner");
 
         switch (score) {
-            case 1: span.innerText = "Tie!"; 
+            case 1: this.writeMessage("Tie!");
             break;
-            case "X": span.innerText = `${this.players[0].name} won!`;
+            case "X": this.writeMessage(`${this.players[0].name} won!`);
             break;
-            case "O": span.innerText = `${this.players[1].name} won!`;
+            case "O": this.writeMessage(`${this.players[1].name} won!`);
             break;
         }
+    },
+
+    writeMessage: function(message) {
+        const span = document.querySelector("#winner");
+        span.innerText = message;
     },
 
     // return winning player's mark. Return 1 for a tie, 0 for an unfinished game.
