@@ -30,24 +30,47 @@ function Player(name, symbol) {
 
 const Game = {
     gameboard: Gameboard,
+    state: "menu",
     players: [Player('Player1', "X"), Player('Player2', "O")],
     toPlay: 0,
 
+    newGame: function() {
+        // get data from form
+        const playerXname = document.querySelector("#playerX");
+        const playerOname = document.querySelector("#playerO");
+
+        // create players
+        this.players = [Player(playerXname, "X"), Player(playerOname, "O")];
+
+        // clear board
+        this.gameboard.clear();
+
+        // switch game state
+        this.state = "game";
+
+        this.gameboard.render();
+    },
+
     handleClick: function(cell, index) {
+        // if not in "game" state, ignore click.
+        if (this.state != "game") return false;
+
         // if cell is already marked, ignore the click.
         if (cell.innerText != "") return false;
 
         this.players[this.toPlay].playMove(index);
         this.toPlay = (this.toPlay + 1) % this.players.length;
         
-        // If game over, reset board.
+        // score game.
         const s = this.score();
+
+        // Handle game over.
         if (s != 0) {
-            this.gameboard.clear();
+            this.state = "menu";
             this.toPlay = 0;
         }
         
-        Gameboard.render();
+        this.gameboard.render();
         return true;
     },
 
