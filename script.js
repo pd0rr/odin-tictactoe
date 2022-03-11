@@ -50,6 +50,7 @@ const Game = {
         // switch game state
         this.state = "game";
 
+        this.writeMessage(`${this.players[this.toPlay].name}'s turn (${this.players[this.toPlay].symbol}).`);
         this.gameboard.render();
     },
 
@@ -62,6 +63,8 @@ const Game = {
 
         this.players[this.toPlay].playMove(index);
         this.toPlay = (this.toPlay + 1) % this.players.length;
+
+        this.writeMessage(`${this.players[this.toPlay].name}'s turn (${this.players[this.toPlay].symbol}).`);
 
         // score game.
         const s = this.score();
