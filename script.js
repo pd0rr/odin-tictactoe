@@ -39,8 +39,17 @@ const Game = {
         const playerXname = document.querySelector("#playerX").value;
         const playerOname = document.querySelector("#playerO").value;
 
-        // create players
-        this.players = [Player(playerXname, "X"), Player(playerOname, "O")];
+        // create first player or CPU.
+        if (playerXname == "CPU")
+            this.players = [CPU(this.game, 0, "X")];
+        else
+            this.players = [Player(playerXname, "X")];
+
+        // create second player or CPU.
+        if (playerOname == "CPU")
+            this.players.push(CPU(this.game, 1, "O"));
+        else
+            this.players.push(Player(playerOname, "O"));
 
         // clear board
         this.gameboard.clear();
@@ -52,6 +61,7 @@ const Game = {
 
         this.writeMessage(`${this.players[this.toPlay].name}'s turn (${this.players[this.toPlay].symbol}).`);
         this.gameboard.render();
+
     },
 
     handleClick: function(cell, index) {
@@ -77,6 +87,7 @@ const Game = {
         
         this.gameboard.render();
         return true;
+
     },
 
     declareWinner: function(score) {
