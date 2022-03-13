@@ -195,7 +195,7 @@ function CPU(game, order, symbol, AI) {
         }
         break;
 
-        case "ideal":
+        case "naive":
         // Play an ideal strategy
         obj.chooseMove = function() {
             const free = game.gameboard.freeCells();
@@ -209,14 +209,53 @@ function CPU(game, order, symbol, AI) {
                 const block = this.findWin(game.players[(game.toPlay + 1) % game.players.length]);
                 if (block !== false) return block;
                 
+                // otherwise, pick random move
                 else return this.randMove();
             }
 
         }
         break;
+
+        case "ideal":
+        obj.chooseMove = function() {
+            return this.minimax(order).move;
+        }
+        break;
     }
 
-    
+    obj.evaluate = function (order) {
+        const score = game.score()
+        if (score == game.players[order].symbol) return 1; // win
+        if (score == 1) return 0; // tie
+        if (score !== 0) return -1; // loss
+
+        return false;
+    }
+
+    obj.minimax = function (order) {
+
+        const value = this.evaluate(order);
+        if (value !== false) return {score: value};
+
+        // if game is not over, there must be available moves. Play them and score them.
+        const free = Gameboard.freeCells();
+        const scores = [];
+        for (let c of free) {
+            game.players[order].playMove(c);
+            console.log(order, c, game.gameboard.board); //debug
+            scores.push(-this.minimax((order + 1) % game.players.length).score);
+            game.players[order].undoMove(c);
+        }
+
+        // return highest scoring move
+        let acc = {move: null, score: -2};
+        for (let i = 0; i < free.length; i++) {
+            if (scores[i] > acc.score)
+                acc = {move: free[i], score: scores[i]};
+        }
+
+        return acc
+    }
 
     // try marking every free cell
     obj.findWin = function(player) {
