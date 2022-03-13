@@ -70,9 +70,9 @@ const Game = {
         this.state = "game";
 
         // handle possible AI turns.
-        this.playAI();
-
+        
         this.writeMessage(`${this.players[this.toPlay].name}'s turn (${this.players[this.toPlay].symbol}).`);
+        this.playAI();
         this.gameboard.render();
     },
 
