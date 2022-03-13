@@ -218,6 +218,7 @@ function CPU(game, order, symbol, AI) {
 
         case "ideal":
         obj.chooseMove = function() {
+            this.cache = {};
             return this.minimax(order).move;
         }
         break;
@@ -232,10 +233,16 @@ function CPU(game, order, symbol, AI) {
         return false;
     }
 
+    obj.cache = {};
+
     obj.minimax = function (order) {
 
+        // is the game over?
         const value = this.evaluate(order);
         if (value !== false) return {score: value};
+
+        // is the gameboard in cache?
+        if (game.gameboard.board in this.cache) return this.cache[game.gameboard.board];
 
         // if game is not over, there must be available moves. Play them and score them.
         const free = Gameboard.freeCells();
@@ -250,14 +257,18 @@ function CPU(game, order, symbol, AI) {
             if (scores[scores.length - 1] === 1) return {move: c, score: 1};
         }
 
+        
         // return highest scoring move
         let acc = {move: null, score: -2};
         for (let i = 0; i < free.length; i++) {
             if (scores[i] > acc.score)
-                acc = {move: free[i], score: scores[i]};
+            acc = {move: free[i], score: scores[i]};
         }
+        
+        // this board wasn't in cache, so let's add it.
+        this.cache[game.gameboard.board] = acc;
 
-        return acc
+        return acc;
     }
 
     // try marking every free cell
