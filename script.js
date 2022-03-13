@@ -149,7 +149,8 @@ function CPU(game, order, symbol) {
 
     // for now, choose a random move.
     obj.chooseMove = function() {
-        return Math.floor(Math.random() * 9);
+        const free = Gameboard.freeCells();
+        return free[Math.floor(Math.random() * free.length)];
     }
 
     return obj;
