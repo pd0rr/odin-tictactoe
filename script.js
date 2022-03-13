@@ -51,13 +51,13 @@ const Game = {
 
         // create first player or CPU.
         if (playerXname == "CPU")
-            this.players = [CPU(this.game, 0, "X", "random")];
+            this.players = [CPU(this, 0, "X", "ideal")];
         else
             this.players = [Player(playerXname, "X")];
 
         // create second player or CPU.
         if (playerOname == "CPU")
-            this.players.push(CPU(this.game, 1, "O", "random"));
+            this.players.push(CPU(this, 1, "O", "ideal"));
         else
             this.players.push(Player(playerOname, "O"));
 
@@ -92,10 +92,9 @@ const Game = {
         this.players[this.toPlay].playMove(index);
         this.nextTurn();
         
-        this.checkGameOver();
-        
-        // handle AI turns.
-        this.playAI();
+        // handle AI turns, but only if game is not over.
+        if (this.checkGameOver() == 0)
+            this.playAI();
         
         this.gameboard.render();
         
@@ -177,18 +176,55 @@ const Game = {
 function CPU(game, order, symbol, AI) {
     const obj = Player("CPU", symbol);
 
+    obj.randMove = function() {
+        const free = game.gameboard.freeCells();
+        return free[Math.floor(Math.random() * free.length)];
+    }
+
     switch (AI) {
         case "random":
         // Play random moves.
         obj.chooseMove = function() {
-            const free = Gameboard.freeCells();
+            const free = game.gameboard.freeCells();
             return free[Math.floor(Math.random() * free.length)];
         }
         break;
 
         case "ideal":
         // Play an ideal strategy
+        obj.chooseMove = function() {
+            const free = game.gameboard.freeCells();
+            
+            // Check if I can win
+            const win = this.findWin();
+            if (win) return win;
+            else return this.randMove();
+
+        }
         break;
+    }
+
+    obj.undoMove = function(c) {
+        Gameboard.board[c] = "";
+    }
+
+    // try marking every free cell
+    obj.findWin = function() {
+        const free = Gameboard.freeCells();
+        for (let c of free) {
+
+            // test move;
+            this.playMove(c);
+            const s = Game.score();
+            this.undoMove(c);
+
+            // if we found the winning move, return it; otherwise, keep going.
+            if (s == this.symbol) {
+                return c;
+            }
+        }
+
+        return false;
     }
 
     return obj;
