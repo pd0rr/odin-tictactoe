@@ -196,7 +196,8 @@ function CPU(game, order, symbol, AI) {
             const free = game.gameboard.freeCells();
             
             // Check if I can win
-            const win = this.findWin();
+            const win = this.findWin(this);
+
             if (win) return win;
             else return this.randMove();
 
@@ -209,17 +210,17 @@ function CPU(game, order, symbol, AI) {
     }
 
     // try marking every free cell
-    obj.findWin = function() {
+    obj.findWin = function(player) {
         const free = Gameboard.freeCells();
         for (let c of free) {
 
             // test move;
-            this.playMove(c);
+            player.playMove(c);
             const s = Game.score();
-            this.undoMove(c);
+            player.undoMove(c);
 
             // if we found the winning move, return it; otherwise, keep going.
-            if (s == this.symbol) {
+            if (s == player.symbol) {
                 return c;
             }
         }
