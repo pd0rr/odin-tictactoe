@@ -245,6 +245,9 @@ function CPU(game, order, symbol, AI) {
             console.log(order, c, game.gameboard.board); //debug
             scores.push(-this.minimax((order + 1) % game.players.length).score);
             game.players[order].undoMove(c);
+
+            // if we found a winning move, exit.
+            if (scores[scores.length - 1] === 1) return {move: c, score: 1};
         }
 
         // return highest scoring move
