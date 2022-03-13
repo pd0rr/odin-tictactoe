@@ -69,9 +69,17 @@ const Game = {
         // switch game state
         this.state = "game";
 
+        // handle possible AI turns.
+        this.playAI();
+
         this.writeMessage(`${this.players[this.toPlay].name}'s turn (${this.players[this.toPlay].symbol}).`);
         this.gameboard.render();
+    },
 
+    nextTurn: function() {
+        this.toPlay = (this.toPlay + 1) % this.players.length;
+
+        this.writeMessage(`${this.players[this.toPlay].name}'s turn (${this.players[this.toPlay].symbol}).`);
     },
 
     handleClick: function(cell, index) {
@@ -82,26 +90,33 @@ const Game = {
         if (cell.innerText != "") return false;
 
         this.players[this.toPlay].playMove(index);
-        this.toPlay = (this.toPlay + 1) % this.players.length;
+        this.nextTurn();
+        
+        this.checkGameOver();
+        
+        // handle AI turns.
+        this.playAI();
+        
+        this.gameboard.render();
+        
+        return true;
+    },
 
-        this.writeMessage(`${this.players[this.toPlay].name}'s turn (${this.players[this.toPlay].symbol}).`);
-
+    // returns 0 if game is not over.
+    checkGameOver: function() {
         // score game.
         const s = this.score();
-
+                
         // Handle game over.
         if (s != 0) {
             this.state = "menu";
             this.declareWinner(s);
         }
-        
-        this.gameboard.render();
-        return true;
 
+        return s;
     },
 
     declareWinner: function(score) {
-
         switch (score) {
             case 1: this.writeMessage("Tie!");
             break;
@@ -140,6 +155,21 @@ const Game = {
 
         // if you're still here, it's a tie.
         return 1;
+    },
+
+    playAI: function() {
+        // keep going as long as you find AIs to play.
+        let player = this.players[this.toPlay];
+        while (player.name == "CPU") {
+            player.playMove(player.chooseMove());
+
+            // if game over, exit loop. Otherwise move onto next turn.
+            if(this.checkGameOver() !== 0) break;
+            
+            this.nextTurn();
+            player = this.players[this.toPlay];
+        }
+
     }
 }
 
