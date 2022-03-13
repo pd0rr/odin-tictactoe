@@ -35,7 +35,12 @@ function Player(name, symbol) {
     const playMove = function (index) {
         Gameboard.mark(this, index);
     };
-    return {name, symbol, playMove};
+
+    const undoMove = function(c) {
+        Gameboard.board[c] = "";
+    }
+
+    return {name, symbol, playMove, undoMove};
 }
 
 const Game = {
@@ -198,16 +203,20 @@ function CPU(game, order, symbol, AI) {
             // Check if I can win
             const win = this.findWin(this);
 
-            if (win) return win;
-            else return this.randMove();
+            if (win !== false) return win;
+            else {
+                // otherwise, check if I can block opponent's win
+                const block = this.findWin(game.players[(game.toPlay + 1) % game.players.length]);
+                if (block !== false) return block;
+                
+                else return this.randMove();
+            }
 
         }
         break;
     }
 
-    obj.undoMove = function(c) {
-        Gameboard.board[c] = "";
-    }
+    
 
     // try marking every free cell
     obj.findWin = function(player) {
