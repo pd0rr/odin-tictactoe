@@ -17,6 +17,16 @@ const Gameboard = {
 
     clear: function() {
         this.board = ["","","","","","","","",""];
+    },
+
+    // Return an array of free cell indices.
+    freeCells: function () {
+        const res = [];
+        for (let i = 0; i < 9; i++) {
+            if (this.board[i] == "")
+                res.push(i);
+        }
+        return res;
     }
 };
 
