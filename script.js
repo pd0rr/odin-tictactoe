@@ -51,13 +51,13 @@ const Game = {
 
         // create first player or CPU.
         if (playerXname == "CPU")
-            this.players = [CPU(this.game, 0, "X")];
+            this.players = [CPU(this.game, 0, "X", "random")];
         else
             this.players = [Player(playerXname, "X")];
 
         // create second player or CPU.
         if (playerOname == "CPU")
-            this.players.push(CPU(this.game, 1, "O"));
+            this.players.push(CPU(this.game, 1, "O", "random"));
         else
             this.players.push(Player(playerOname, "O"));
 
@@ -174,13 +174,21 @@ const Game = {
 }
 
 //CPU factory
-function CPU(game, order, symbol) {
+function CPU(game, order, symbol, AI) {
     const obj = Player("CPU", symbol);
 
-    // for now, choose a random move.
-    obj.chooseMove = function() {
-        const free = Gameboard.freeCells();
-        return free[Math.floor(Math.random() * free.length)];
+    switch (AI) {
+        case "random":
+        // Play random moves.
+        obj.chooseMove = function() {
+            const free = Gameboard.freeCells();
+            return free[Math.floor(Math.random() * free.length)];
+        }
+        break;
+
+        case "ideal":
+        // Play an ideal strategy
+        break;
     }
 
     return obj;
